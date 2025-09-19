@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../utils/colors.dart';
+import '../../home/home_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -43,20 +44,20 @@ class _SignUpFormState extends State<SignUpForm> {
           children: [
             TextFormField(
               controller: _name,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.person, color: AppColors.navy), labelText: 'Full Name'),
+              decoration: InputDecoration(prefixIcon: Icon(Icons.person, color: AppColors.navy), labelText: 'Full Name'),
               validator: (v)=> (v??'').isNotEmpty ? null : 'Required',
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _email,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.mail, color: AppColors.navy), labelText: 'Email'),
+              decoration: InputDecoration(prefixIcon: Icon(Icons.mail, color: AppColors.navy), labelText: 'Email'),
               validator: (v)=> v!=null && v.contains('@') ? null : 'Enter a valid email',
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _phone,
               keyboardType: TextInputType.phone,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.call, color: AppColors.navy), labelText: 'Phone Number'),
+              decoration: InputDecoration(prefixIcon: Icon(Icons.call, color: AppColors.navy), labelText: 'Phone Number'),
               validator: (v)=> (v??'').length>=10 ? null : 'Enter valid phone',
             ),
             const SizedBox(height: 12),
@@ -64,7 +65,7 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _password,
               obscureText: obscure1,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock, color: AppColors.navy),
+                prefixIcon: Icon(Icons.lock, color: AppColors.navy),
                 labelText: 'Password',
                 suffixIcon: IconButton(icon: Icon(obscure1?Icons.visibility:Icons.visibility_off), onPressed: ()=>setState(()=>obscure1=!obscure1)),
               ),
@@ -75,7 +76,7 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _confirm,
               obscureText: obscure2,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock, color: AppColors.navy),
+                prefixIcon: Icon(Icons.lock, color: AppColors.navy),
                 labelText: 'Confirm Password',
                 suffixIcon: IconButton(icon: Icon(obscure2?Icons.visibility:Icons.visibility_off), onPressed: ()=>setState(()=>obscure2=!obscure2)),
               ),
@@ -83,24 +84,24 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: state,
+              initialValue: state,
               items: states.map((s)=>DropdownMenuItem(value:s, child: Text(s))).toList(),
               onChanged: (v)=>setState(()=>state=v),
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.location_pin, color: AppColors.navy), labelText: 'State'),
+              decoration:  InputDecoration(prefixIcon: Icon(Icons.location_pin, color: AppColors.navy), labelText: 'State'),
               validator: (v)=> v!=null ? null : 'Select state',
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
-              value: city,
+              initialValue: city,
               items: cities.map((c)=>DropdownMenuItem(value:c, child: Text(c))).toList(),
               onChanged: (v)=>setState(()=>city=v),
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.location_city, color: AppColors.navy), labelText: 'City'),
+              decoration:  InputDecoration(prefixIcon: Icon(Icons.location_city, color: AppColors.navy), labelText: 'City'),
               validator: (v)=> v!=null ? null : 'Select city',
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: _sport,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.sports_soccer, color: AppColors.navy), labelText: 'Preferred Sport'),
+              decoration:  InputDecoration(prefixIcon: Icon(Icons.sports_soccer, color: AppColors.navy), labelText: 'Preferred Sport'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -119,7 +120,10 @@ class _SignUpFormState extends State<SignUpForm> {
                 setState(()=>loading=false);
                 if (ok && context.mounted) {
                   // later: navigate to OTP screen
-                  Navigator.pushReplacementNamed(context, '/home');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
                 } else {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registration failed')));
