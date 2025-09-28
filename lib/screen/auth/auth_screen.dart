@@ -1,7 +1,7 @@
 // lib/screen/auth/auth_screen.dart
 import 'widgets/signin_form.dart';
 import 'widgets/signup_form.dart';
-
+import '../main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
 
@@ -15,10 +15,39 @@ class AuthScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.background, // Use a valid background color
         appBar: AppBar(
-          toolbarHeight: 0,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
+  toolbarHeight: 60,
+  elevation: 0,
+  backgroundColor: Colors.transparent,
+  automaticallyImplyLeading: false,
+  actions: [
+    Padding(
+      padding: const EdgeInsets.only(right: 16.0, top: 8.0),
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const MainNavigationScreen(),
+            ),
+          );
+        },
+        style: TextButton.styleFrom(
+          backgroundColor: const Color(0xFFFF6B35).withOpacity(0.1),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
+        child: const Text(
+          'Skip',
+          style: TextStyle(
+            color: Color(0xFFFF6B35),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
+  ],
+),
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(

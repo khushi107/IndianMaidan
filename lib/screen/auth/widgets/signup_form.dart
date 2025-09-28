@@ -1,8 +1,10 @@
+// lib/screen/auth/widgets/signup_form.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/auth_provider.dart';
 import '../../../utils/colors.dart';
 import '../../home/home_screen.dart';
+import '../../main_navigation_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -119,12 +121,12 @@ class _SignUpFormState extends State<SignUpForm> {
                 );
                 setState(()=>loading=false);
                 if (ok && context.mounted) {
-                  // later: navigate to OTP screen
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  );
-                } else {
+  // later: navigate to OTP screen
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+    (route) => false,
+  );
+} else {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Registration failed')));
                   }

@@ -42,10 +42,11 @@ class _SignInFormState extends State<SignInForm> {
       });
 
       if (success) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
-        );
-      } else {
+  Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (ctx) => const MainNavigationScreen()),
+    (route) => false,
+  );
+} else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Login failed. Please check your credentials.'),

@@ -24,6 +24,12 @@ class AppColors {
   static const Color darkGrey = Color(0xFF1E293B);
   static const Color border = Color(0xFFE2E8F0);
 
+  // Welcome screen specific colors
+ // static const Color saffron = Color(0xFFFF6B35);
+  //static const Color navy = Color(0xFF1E40AF);
+  //static const Color green = Color(0xFF059669);
+  static const Color lightBackground = Color(0xFFF8FAFC); 
+
   static Color? get primaryGreen => null;
 
   static get bgMid => null;

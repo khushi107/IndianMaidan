@@ -1,3 +1,4 @@
+//lib/screen/splash/splash_screen.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,7 @@ import '../../providers/auth_provider.dart';
 import '../auth/auth_screen.dart';
 import '../main_navigation_screen.dart';
 import '../../utils/colors.dart';
+import '../welcome/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -38,22 +40,19 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
-  Future<void> _checkAuthAndNavigate() async {
-    // We use listen: false here because we're not in the build method.
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+ Future<void> _checkAuthAndNavigate() async {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  final bool isLoggedIn = await authProvider.tryAutoLogin();
 
-    final bool isLoggedIn = await authProvider.tryAutoLogin();
-
-    // Ensure the widget is still mounted before navigating to avoid errors.
-    if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          // If logged in, go to the main app screen. If not, go to the authentication screen.
-          builder: (context) => isLoggedIn ? const MainNavigationScreen() : const AuthScreen(),
-        ),
-      );
-    }
+  if (mounted) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        // If logged in, go to main app. If not, go to welcome screen first
+        builder: (context) => isLoggedIn ? const MainNavigationScreen() : const WelcomeScreen(),
+      ),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
