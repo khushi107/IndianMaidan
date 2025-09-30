@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
 import '../auth/auth_screen.dart';
+import '../business/business_welcome_screen.dart'; // NEW IMPORT
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -143,7 +144,7 @@ class WelcomeScreen extends StatelessWidget {
                             height: 56,
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).pushReplacement(
+                                Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => const AuthScreen(),
                                   ),
@@ -225,7 +226,7 @@ class WelcomeScreen extends StatelessWidget {
                           
                           const SizedBox(height: 40),
                           
-                          // Partner Link Button
+                          // Partner Link Button - UPDATED FUNCTIONALITY
                           Container(
                             width: double.infinity,
                             height: 50,
@@ -239,10 +240,10 @@ class WelcomeScreen extends StatelessWidget {
                             ),
                             child: TextButton.icon(
                               onPressed: () {
-                                // TODO: Navigate to partner portal
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Partner portal coming soon!'),
+                                // UPDATED: Navigate to business portal instead of showing snackbar
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => const BusinessWelcomeScreen(),
                                   ),
                                 );
                               },
