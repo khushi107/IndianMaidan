@@ -1,17 +1,12 @@
-//lib/main.dart
+// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:indian_maidan_flutter/providers/auth_provider.dart';
 import 'package:indian_maidan_flutter/providers/turf_provider.dart';
-import 'package:indian_maidan_flutter/screen/auth/auth_screen.dart';
-import 'package:indian_maidan_flutter/screen/main_navigation_screen.dart';
 import 'package:indian_maidan_flutter/screen/splash/splash_screen.dart';
-import 'package:indian_maidan_flutter/providers/bookings_provider.dart';
-import 'package:indian_maidan_flutter/providers/explore_provider.dart';
-import 'package:indian_maidan_flutter/screen/welcome/welcome_screen.dart';
 import 'package:indian_maidan_flutter/utils/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const IndianMaidanApp());
 }
@@ -23,7 +18,6 @@ class IndianMaidanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // CORRECTED the typo on the next two lines
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => TurfProvider()),
       ],
@@ -32,12 +26,6 @@ class IndianMaidanApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: buildTheme(),
         home: const SplashScreen(),
-        routes: {
-          // Add routes here as needed
-          '/main': (context) => const MainNavigationScreen(),
-          '/auth': (context) => const AuthScreen(),
-          '/welcome': (context) => const WelcomeScreen(),
-        },
       ),
     );
   }
