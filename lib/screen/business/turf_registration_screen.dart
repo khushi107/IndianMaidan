@@ -1,8 +1,6 @@
 // lib/screen/business/turf_registration_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:geolocator/geolocator.dart';
 
 class TurfRegistrationScreen extends StatefulWidget {
   const TurfRegistrationScreen({Key? key}) : super(key: key);
@@ -34,59 +32,224 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
   final _descriptionController = TextEditingController();
   final List<String> _selectedAmenities = [];
 
-  // Data
+  // COMPLETE Indian States and Cities Data
   final Map<String, List<String>> _stateCityMap = {
-    'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur'],
-    'Rajasthan': ['Jaipur', 'Jodhpur', 'Udaipur', 'Kota', 'Bikaner', 'Ajmer'],
-    'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik'],
-    'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'],
-    'Karnataka': ['Bangalore', 'Mysore', 'Hubli', 'Mangalore'],
-    'Delhi': ['New Delhi', 'North Delhi', 'South Delhi'],
+    'Andhra Pradesh': ['Visakhapatnam', 'Vijayawada', 'Guntur', 'Nellore', 'Kurnool', 'Anantapur', 'Kadapa', 'Tirupati', 'Rajahmundry', 'Kakinada'],
+    'Arunachal Pradesh': ['Itanagar', 'Naharlagun', 'Pasighat', 'Bomdila', 'Tezu', 'Ziro', 'Along', 'Daporijo', 'Roing', 'Anini'],
+    'Assam': ['Guwahati', 'Silchar', 'Dibrugarh', 'Jorhat', 'Tezpur', 'Nagaon', 'Tinsukia', 'Sivasagar', 'Goalpara', 'Barpeta'],
+    'Bihar': ['Patna', 'Gaya', 'Bhagalpur', 'Muzaffarpur', 'Purnia', 'Darbhanga', 'Arrah', 'Begusarai', 'Katihar', 'Chhapra'],
+    'Chhattisgarh': ['Raipur', 'Bhilai', 'Durg', 'Bilaspur', 'Korba', 'Rajnandgaon', 'Raigarh', 'Ambikapur', 'Jagdalpur', 'Chirmiri'],
+    'Goa': ['Panaji', 'Margao', 'Vasco da Gama', 'Mapusa', 'Ponda', 'Bicholim', 'Valpoi', 'Sanquelim', 'Curchorem', 'Sanguem'],
+    'Gujarat': ['Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Anand', 'Bharuch', 'Gandhinagar', 'Junagadh'],
+    'Haryana': ['Gurgaon', 'Faridabad', 'Panipat', 'Ambala', 'Yamunanagar', 'Rohtak', 'Hisar', 'Karnal', 'Sonipat', 'Panchkula'],
+    'Himachal Pradesh': ['Shimla', 'Mandi', 'Solan', 'Kullu', 'Dharamshala', 'Palampur', 'Chamba', 'Una', 'Bilaspur', 'Kangra'],
+    'Jharkhand': ['Ranchi', 'Jamshedpur', 'Dhanbad', 'Bokaro', 'Deoghar', 'Hazaribagh', 'Giridih', 'Ramgarh', 'Medininagar', 'Chatra'],
+    'Karnataka': ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum', 'Gulbarga', 'Davangere', 'Bellary', 'Bijapur', 'Shimoga'],
+    'Kerala': ['Thiruvananthapuram', 'Kochi', 'Kozhikode', 'Thrissur', 'Kollam', 'Alappuzha', 'Palakkad', 'Kannur', 'Kottayam', 'Pathanamthitta'],
+    'Madhya Pradesh': ['Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain', 'Sagar', 'Dewas', 'Satna', 'Ratlam', 'Rewa'],
+    'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik', 'Aurangabad', 'Solapur', 'Kolhapur', 'Amravati', 'Nanded'],
+    'Manipur': ['Imphal', 'Thoubal', 'Bishnupur', 'Churachandpur', 'Senapati', 'Tamenglong', 'Ukhrul', 'Chandel', 'Kangpokpi', 'Jiribam'],
+    'Meghalaya': ['Shillong', 'Tura', 'Jowai', 'Nongstoin', 'Williamnagar', 'Baghmara', 'Nongpoh', 'Mairang', 'Resubelpara', 'Amlarem'],
+    'Mizoram': ['Aizawl', 'Lunglei', 'Saiha', 'Champhai', 'Kolasib', 'Serchhip', 'Lawngtlai', 'Mamit', 'Saitual', 'Khawzawl'],
+    'Nagaland': ['Kohima', 'Dimapur', 'Mokokchung', 'Tuensang', 'Wokha', 'Mon', 'Phek', 'Zunheboto', 'Longleng', 'Kiphire'],
+    'Odisha': ['Bhubaneswar', 'Cuttack', 'Rourkela', 'Brahmapur', 'Sambalpur', 'Puri', 'Balasore', 'Bhadrak', 'Baripada', 'Jharsuguda'],
+    'Punjab': ['Ludhiana', 'Amritsar', 'Jalandhar', 'Patiala', 'Bathinda', 'Pathankot', 'Hoshiarpur', 'Moga', 'Firozpur', 'Sangrur'],
+    'Rajasthan': ['Jaipur', 'Jodhpur', 'Kota', 'Bikaner', 'Ajmer', 'Udaipur', 'Sikar', 'Sri Ganganagar', 'Alwar', 'Bhilwara'],
+    'Sikkim': ['Gangtok', 'Namchi', 'Mangan', 'Gyalshing', 'Soreng', 'Ravongla', 'Lachung', 'Lachen', 'Pelling', 'Rumtek'],
+    'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruchirappalli', 'Vellore', 'Erode', 'Tiruppur', 'Thoothukkudi', 'Dindigul'],
+    'Telangana': ['Hyderabad', 'Warangal', 'Nizamabad', 'Karimnagar', 'Ramagundam', 'Khammam', 'Mahbubnagar', 'Nalgonda', 'Adilabad', 'Siddipet'],
+    'Tripura': ['Agartala', 'Udaipur', 'Dharmanagar', 'Kailasahar', 'Belonia', 'Khowai', 'Teliamura', 'Ambassa', 'Kamalpur', 'Sabroom'],
+    'Uttar Pradesh': ['Lucknow', 'Kanpur', 'Ghaziabad', 'Agra', 'Varanasi', 'Meerut', 'Allahabad', 'Bareilly', 'Aligarh', 'Moradabad'],
+    'Uttarakhand': ['Dehradun', 'Haridwar', 'Roorkee', 'Haldwani', 'Rudrapur', 'Kashipur', 'Rishikesh', 'Kotdwar', 'Ramnagar', 'Pauri'],
+    'West Bengal': ['Kolkata', 'Howrah', 'Durgapur', 'Asansol', 'Siliguri', 'Bardhaman', 'Malda', 'Baharampur', 'Habra', 'Kharagpur'],
+    'Delhi': ['New Delhi', 'North Delhi', 'South Delhi', 'East Delhi', 'West Delhi', 'Central Delhi', 'Shahdara', 'Dwarka', 'Rohini', 'Pitampura'],
+    'Jammu & Kashmir': ['Srinagar', 'Jammu', 'Anantnag', 'Baramulla', 'Pulwama', 'Kupwara', 'Budgam', 'Ganderbal', 'Bandipora', 'Shopian'],
+    'Ladakh': ['Leh', 'Kargil', 'Drass', 'Nubra', 'Zanskar'],
+    'Chandigarh': ['Chandigarh', 'Mohali', 'Panchkula'],
+    'Dadra & Nagar Haveli': ['Silvassa', 'Dadra', 'Naroli', 'Rakholi', 'Samarvarni'],
+    'Daman & Diu': ['Daman', 'Diu', 'Moti Daman', 'Nani Daman'],
+    'Lakshadweep': ['Kavaratti', 'Agatti', 'Amini', 'Andrott', 'Bitra'],
+    'Puducherry': ['Puducherry', 'Karaikal', 'Mahe', 'Yanam'],
+    'Andaman & Nicobar Islands': ['Port Blair', 'Car Nicobar', 'Hut Bay', 'Diglipur'],
   };
 
+  // COMPLETE Sports Options
   final List<Map<String, dynamic>> _sportOptions = [
     {'id': 'football', 'name': 'Football', 'icon': Icons.sports_soccer},
     {'id': 'cricket', 'name': 'Cricket', 'icon': Icons.sports_cricket},
     {'id': 'badminton', 'name': 'Badminton', 'icon': Icons.sports_tennis},
     {'id': 'tennis', 'name': 'Tennis', 'icon': Icons.sports_tennis},
     {'id': 'basketball', 'name': 'Basketball', 'icon': Icons.sports_basketball},
+    {'id': 'volleyball', 'name': 'Volleyball', 'icon': Icons.sports_volleyball},
     {'id': 'swimming', 'name': 'Swimming', 'icon': Icons.pool},
+    {'id': 'pickleball', 'name': 'Pickleball', 'icon': Icons.sports_tennis},
+    {'id': 'squash', 'name': 'Squash', 'icon': Icons.sports_tennis},
     {'id': 'table_tennis', 'name': 'Table Tennis', 'icon': Icons.table_restaurant},
+    {'id': 'pool_table', 'name': 'Pool/Billiards', 'icon': Icons.sports_bar},
     {'id': 'gym', 'name': 'Gym/Fitness', 'icon': Icons.fitness_center},
+    {'id': 'boxing', 'name': 'Boxing', 'icon': Icons.sports_mma},
   ];
 
+  // COMPLETE Court Sizes by Sport
   final Map<String, List<String>> _sportCourtSizes = {
-    'football': ['110x70 yards (International)', '50x30 yards (6-a-side)', '40x20 yards (5-a-side)'],
-    'cricket': ['22 yards (Full Pitch)', 'Box Cricket 30m x 20m'],
-    'badminton': ['44x17 feet (Singles)', '44x20 feet (Doubles)'],
-    'tennis': ['78x27 feet (Singles)', '78x36 feet (Doubles)'],
-    'basketball': ['94x50 feet (Full Court)', 'Half Court (47x50 ft)'],
-    'swimming': ['50m x 25m (Olympic)', '25m x 21m (Short Course)', '20m x 10m (Training)'],
-    'table_tennis': ['Standard Table (9x5 ft)', 'Tournament Table'],
-    'gym': ['Small Studio (500-1000 sq ft)', 'Medium Gym (1000-2000 sq ft)'],
+    'football': [
+      '110x70 yards (International)',
+      '105x68 yards (Standard)',
+      '100x60 yards (Full Size)',
+      '90x60 yards (Youth Full)',
+      '80x50 yards (Small Sided)',
+      '60x40 yards (7-a-side)',
+      '50x30 yards (6-a-side)',
+      '40x30 yards (5-a-side)',
+      '30x20 yards (Mini)',
+      'Indoor 40x20 meters (Futsal)'
+    ],
+    'cricket': [
+      'Box Cricket 30m x 20m',
+      'Box Cricket 28m x 18m',
+      'Box Cricket 25m x 16m',
+      '22 yards (Full Pitch)',
+      '20 yards (Academy)',
+      '18 yards (Youth)',
+      '16 yards (Junior)',
+      'Indoor Cricket Net 20m',
+      'Bowling Machine Lane',
+      'Practice Pitch (Single Lane)',
+      'Practice Pitch (Multi Lane)'
+    ],
+    'badminton': [
+      '44x17 feet (Singles)',
+      '44x20 feet (Doubles)',
+      'School Size Court',
+      'Wooden Indoor Court',
+      'Synthetic Mat Court',
+      'Multi-Court Hall'
+    ],
+    'tennis': [
+      '78x27 feet (Singles)',
+      '78x36 feet (Doubles)',
+      'Mini Tennis (36\' x 18\')',
+      'QuickStart (60\' x 21\')',
+      'ITF Indoor Court',
+      'Hard Court',
+      'Clay Court',
+      'Grass Court'
+    ],
+    'basketball': [
+      '94x50 feet (Full Court)',
+      '92x50 feet (College)',
+      '84x50 feet (High School)',
+      '74x42 feet (Junior)',
+      'Half Court (47x50 ft)',
+      '3x3 Court (15x11 m)'
+    ],
+    'volleyball': [
+      '60x30 feet (Indoor)',
+      '59x29.5 feet (Standard)',
+      '52.5x26.25 feet (Beach)',
+      'Training Court',
+      'Multi-purpose Court'
+    ],
+    'swimming': [
+      '50m x 25m (Olympic)',
+      '25m x 21m (Short Course)',
+      '33.33m x 25m',
+      '20m x 10m (Training)',
+      'Kids Pool'
+    ],
+    'pickleball': [
+      '44x20 feet (Standard)',
+      'Tournament Court (44x20 ft)',
+      'Multi-use Court',
+      'Indoor Court',
+      'Outdoor Court'
+    ],
+    'squash': [
+      '32x21 feet (International)',
+      'Singles Court (Standard)',
+      'American Doubles (45x25 ft)',
+      'Practice Court'
+    ],
+    'table_tennis': [
+      'Standard Table (9x5 ft)',
+      'Tournament Table',
+      'Mini Table (7x4 ft)',
+      'Training Table'
+    ],
+    'pool_table': [
+      '9-foot Table (Regulation)',
+      '8-foot Table (Standard)',
+      '7-foot Table (Bar Size)',
+      '6-foot Table (Home)',
+      'Snooker Table (12x6 ft)'
+    ],
+    'gym': [
+      'Small Studio (500-1000 sq ft)',
+      'Medium Gym (1000-2000 sq ft)',
+      'Large Gym (2000-5000 sq ft)',
+      'CrossFit Box',
+      'Personal Training Studio'
+    ],
+    'boxing': [
+      'Standard Ring (20x20 ft)',
+      'Training Ring (16x16 ft)',
+      'Heavy Bag Area',
+      'Boxing Studio',
+      'MMA Cage (30x30 ft)'
+    ],
   };
 
+  // Surface Options
   final List<Map<String, dynamic>> _surfaceOptions = [
     {'id': 'artificial_grass', 'name': 'Artificial Grass', 'icon': Icons.grass},
     {'id': 'natural_grass', 'name': 'Natural Grass', 'icon': Icons.grass},
     {'id': 'concrete', 'name': 'Concrete', 'icon': Icons.construction},
     {'id': 'wooden', 'name': 'Wooden', 'icon': Icons.business},
     {'id': 'rubber', 'name': 'Rubber', 'icon': Icons.construction},
+    {'id': 'clay', 'name': 'Clay', 'icon': Icons.terrain},
   ];
 
+  // Surface Options by Sport
   final Map<String, List<Map<String, dynamic>>> _surfaceOptionsBySport = {
     'swimming': [
       {'id': 'indoor_pool', 'name': 'Indoor Pool', 'icon': Icons.business},
       {'id': 'outdoor_pool', 'name': 'Outdoor Pool', 'icon': Icons.wb_sunny},
       {'id': 'temperature_controlled', 'name': 'Temperature Controlled', 'icon': Icons.thermostat},
+      {'id': 'saltwater', 'name': 'Saltwater Pool', 'icon': Icons.water},
+    ],
+    'table_tennis': [
+      {'id': 'wooden_table', 'name': 'Wooden Table', 'icon': Icons.business},
+      {'id': 'composite_table', 'name': 'Composite Table', 'icon': Icons.construction},
+      {'id': 'outdoor_table', 'name': 'Weather-Resistant Table', 'icon': Icons.wb_sunny},
+      {'id': 'tournament_table', 'name': 'Tournament Grade', 'icon': Icons.emoji_events},
+    ],
+    'pool_table': [
+      {'id': 'slate_bed', 'name': 'Slate Bed Table', 'icon': Icons.construction},
+      {'id': 'wooden_bed', 'name': 'Wooden Bed Table', 'icon': Icons.business},
+      {'id': 'tournament_grade', 'name': 'Tournament Grade', 'icon': Icons.emoji_events},
+      {'id': 'recreational', 'name': 'Recreational Table', 'icon': Icons.home},
+    ],
+    'squash': [
+      {'id': 'glass_court', 'name': 'Glass Back Court', 'icon': Icons.construction},
+      {'id': 'traditional_court', 'name': 'Traditional Court', 'icon': Icons.business},
+      {'id': 'wooden_floor', 'name': 'Wooden Floor', 'icon': Icons.business},
+      {'id': 'synthetic_floor', 'name': 'Synthetic Floor', 'icon': Icons.construction},
     ],
     'gym': [
       {'id': 'rubber_flooring', 'name': 'Rubber Flooring', 'icon': Icons.construction},
       {'id': 'wooden_flooring', 'name': 'Wooden Flooring', 'icon': Icons.business},
       {'id': 'vinyl_flooring', 'name': 'Vinyl Flooring', 'icon': Icons.construction},
+      {'id': 'turf_flooring', 'name': 'Turf Flooring', 'icon': Icons.grass},
+    ],
+    'boxing': [
+      {'id': 'canvas_ring', 'name': 'Canvas Ring', 'icon': Icons.construction},
+      {'id': 'rubber_mats', 'name': 'Rubber Mats', 'icon': Icons.construction},
+      {'id': 'wooden_floor', 'name': 'Wooden Floor', 'icon': Icons.business},
+      {'id': 'foam_mats', 'name': 'Foam Mats', 'icon': Icons.construction},
     ],
   };
 
+  // Time Slots
   final List<String> _timeSlots = List.generate(36, (i) {
     final hour = (i + 10) ~/ 2;
     final minute = (i % 2) * 30;
@@ -95,6 +258,7 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
     return '$h:$m';
   });
 
+  // Amenities
   final List<Map<String, dynamic>> _amenitiesOptions = [
     {'id': 'parking', 'name': 'Parking', 'icon': Icons.local_parking},
     {'id': 'wifi', 'name': 'Wi-Fi', 'icon': Icons.wifi},
@@ -106,6 +270,8 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
     {'id': 'first_aid', 'name': 'First Aid', 'icon': Icons.medical_services},
     {'id': 'cctv', 'name': 'CCTV Security', 'icon': Icons.security},
     {'id': 'lighting', 'name': 'Floodlights', 'icon': Icons.light_mode},
+    {'id': 'seating', 'name': 'Spectator Seating', 'icon': Icons.event_seat},
+    {'id': 'sound_system', 'name': 'Sound System', 'icon': Icons.speaker},
   ];
 
   @override
@@ -426,7 +592,7 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
                     ? () => setState(() {
                           sport.totalCourts--;
                           if (sport.totalCourts == 1) {
-                            sport.hasDifferentSpecs = false; // KEY: Reset toggle when count becomes 1
+                            sport.hasDifferentSpecs = false;
                           }
                         })
                     : null,
@@ -463,7 +629,7 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
                   setState(() {
                     sport.hasDifferentSpecs = v;
                     if (v) {
-                      _initializeIndividualCourts(sport); // KEY: Initialize courts with defaults
+                      _initializeIndividualCourts(sport);
                     }
                   });
                 },
@@ -479,7 +645,6 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
   }
 
   void _initializeIndividualCourts(SportConfig sport) {
-    // KEY: Initialize courts with parent sport's default values
     sport.courts = List.generate(
       sport.totalCourts,
       (index) => CourtConfig(
@@ -623,7 +788,6 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
       onTap: sport.type != null
           ? () => _showSelectionModal(
                 'Court Size',
-                //sizes,
                 sizes.cast<String>(),
                 currentValue,
                 (v) {
@@ -980,9 +1144,17 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
     const labels = {
       'football': 'Number of Turfs',
       'cricket': 'Number of Turfs',
+      'badminton': 'Number of Courts',
+      'tennis': 'Number of Courts',
+      'basketball': 'Number of Courts',
+      'volleyball': 'Number of Courts',
       'swimming': 'Number of Pools',
+      'pickleball': 'Number of Courts',
+      'squash': 'Number of Courts',
       'table_tennis': 'Number of Tables',
+      'pool_table': 'Number of Tables',
       'gym': 'Number of Areas',
+      'boxing': 'Number of Rings/Areas',
     };
     return labels[sportType] ?? 'Number of Courts';
   }
@@ -992,9 +1164,17 @@ class _TurfRegistrationScreenState extends State<TurfRegistrationScreen> {
     const labels = {
       'football': 'Turf',
       'cricket': 'Turf',
+      'badminton': 'Court',
+      'tennis': 'Court',
+      'basketball': 'Court',
+      'volleyball': 'Court',
       'swimming': 'Pool',
+      'pickleball': 'Court',
+      'squash': 'Court',
       'table_tennis': 'Table',
+      'pool_table': 'Table',
       'gym': 'Area',
+      'boxing': 'Ring/Area',
     };
     return labels[sportType] ?? 'Court';
   }
